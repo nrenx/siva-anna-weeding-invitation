@@ -147,41 +147,6 @@ export function GallerySection() {
         </button>
       </div>
 
-      {/* Dot indicators */}
-      <div className="flex items-center justify-center gap-[10px] mt-6">
-        {Array.from({ length: TOTAL_SLIDES }, (_, i) => (
-          <button
-            key={i}
-            onClick={() => setCurrent(i)}
-            className="rounded-full cursor-pointer border-none p-0"
-            style={{
-              width: current === i ? "10px" : "8px",
-              height: current === i ? "10px" : "8px",
-              background: current === i ? "#C9A84C" : "transparent",
-              border: current === i ? "none" : "1.5px solid #C9A84C",
-              opacity: current === i ? 1 : 0.5,
-              transform: current === i ? "scale(1.3)" : "scale(1)",
-              transition: "all 0.3s ease",
-              minWidth: "44px",
-              minHeight: "44px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <span
-              className="rounded-full block"
-              style={{
-                width: current === i ? "10px" : "8px",
-                height: current === i ? "10px" : "8px",
-                background: current === i ? "#C9A84C" : "transparent",
-                border: current === i ? "none" : "1.5px solid #C9A84C",
-                opacity: current === i ? 1 : 0.5,
-              }}
-            />
-          </button>
-        ))}
-      </div>
     </section>
   );
 }
