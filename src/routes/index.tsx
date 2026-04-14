@@ -13,7 +13,7 @@ import { EventsSection } from "@/components/wedding/EventsSection";
 import { CeremonySection } from "@/components/wedding/CeremonySection";
 import { FamilySection } from "@/components/wedding/FamilySection";
 import { GallerySection } from "@/components/wedding/GallerySection";
-import { RSVPSection } from "@/components/wedding/RSVPSection";
+
 import { FooterSection } from "@/components/wedding/FooterSection";
 import { GoldDivider } from "@/components/wedding/GoldDivider";
 
@@ -70,8 +70,6 @@ function WeddingPage() {
         <FamilySection />
         <GoldDivider />
         <GallerySection />
-        <GoldDivider />
-        <RSVPSection />
         <GoldDivider />
         <FooterSection />
       </main>

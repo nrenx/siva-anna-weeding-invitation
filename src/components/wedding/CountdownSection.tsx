@@ -17,39 +17,59 @@ function getTimeLeft() {
   };
 }
 
-function CountdownBox({ value, label, pulse }: { value: number; label: string; pulse?: boolean }) {
+function CountdownBox({ value, label, pulse, delay }: { value: number; label: string; pulse?: boolean; delay: number }) {
   return (
     <motion.div
-      className="rounded-2xl text-center"
+      className="relative overflow-hidden rounded-2xl text-center"
       style={{
-        background: "#FFFFFF",
+        background: "linear-gradient(145deg, #FFFFFF 0%, #FDF6E3 100%)",
         border: "1px solid #E8D5A3",
-        boxShadow: "0 4px 32px rgba(201,168,76,0.12)",
-        padding: "28px 20px",
+        boxShadow: "0 8px 40px rgba(201,168,76,0.10), inset 0 1px 0 rgba(255,255,255,0.8)",
+        padding: "clamp(20px, 4vw, 36px) clamp(12px, 3vw, 24px)",
       }}
-      animate={pulse ? { scale: [1, 1.04, 1] } : undefined}
-      transition={pulse ? { duration: 1, repeat: Infinity } : undefined}
+      initial={{ opacity: 0, y: 30, scale: 0.95 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ duration: 0.6, delay, ease: "easeOut" }}
+      viewport={{ once: true }}
     >
-      <div
+      {/* Decorative corner accents */}
+      <span className="absolute top-2 left-2 w-4 h-4 border-t border-l" style={{ borderColor: "rgba(201,168,76,0.3)" }} />
+      <span className="absolute top-2 right-2 w-4 h-4 border-t border-r" style={{ borderColor: "rgba(201,168,76,0.3)" }} />
+      <span className="absolute bottom-2 left-2 w-4 h-4 border-b border-l" style={{ borderColor: "rgba(201,168,76,0.3)" }} />
+      <span className="absolute bottom-2 right-2 w-4 h-4 border-b border-r" style={{ borderColor: "rgba(201,168,76,0.3)" }} />
+
+      <motion.div
         style={{
           fontFamily: "'Cormorant Garamond', serif",
           fontWeight: 700,
-          fontSize: "clamp(48px, 7vw, 80px)",
+          fontSize: "clamp(42px, 8vw, 72px)",
           color: "#2C2C2C",
           lineHeight: 1,
         }}
+        animate={pulse ? { scale: [1, 1.03, 1] } : undefined}
+        transition={pulse ? { duration: 1, repeat: Infinity } : undefined}
       >
         {String(value).padStart(2, "0")}
-      </div>
+      </motion.div>
+
+      {/* Gold shimmer line */}
+      <div
+        className="mx-auto my-2"
+        style={{
+          width: "24px",
+          height: "1px",
+          background: "linear-gradient(90deg, transparent, #C9A84C, transparent)",
+        }}
+      />
+
       <div
         style={{
           fontFamily: "'Lato', sans-serif",
           fontWeight: 300,
-          fontSize: "11px",
+          fontSize: "clamp(9px, 1.5vw, 12px)",
           color: "#C9A84C",
-          letterSpacing: "0.25em",
+          letterSpacing: "0.3em",
           textTransform: "uppercase",
-          marginTop: "8px",
         }}
       >
         {label}
@@ -78,18 +98,31 @@ export function CountdownSection() {
         font="playfair"
       />
 
-      <motion.div
-        className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 max-w-[700px] mx-auto"
-        initial={{ opacity: 0, y: 40 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.75, ease: "easeOut" }}
-        viewport={{ once: true, margin: "-80px" }}
+      {/* Telugu text */}
+      <motion.p
+        className="text-center mb-8"
+        style={{
+          fontFamily: "'Cormorant Garamond', serif",
+          fontWeight: 300,
+          fontStyle: "italic",
+          fontSize: "16px",
+          color: "#C9A84C",
+          marginTop: "-16px",
+        }}
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        transition={{ duration: 0.6, delay: 0.2 }}
+        viewport={{ once: true }}
       >
-        <CountdownBox value={time.days} label="Days" />
-        <CountdownBox value={time.hours} label="Hours" />
-        <CountdownBox value={time.minutes} label="Minutes" />
-        <CountdownBox value={time.seconds} label="Seconds" pulse />
-      </motion.div>
+        ప్రతి క్షణం లెక్కిస్తూ...
+      </motion.p>
+
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-5 max-w-[680px] mx-auto">
+        <CountdownBox value={time.days} label="Days" delay={0} />
+        <CountdownBox value={time.hours} label="Hours" delay={0.1} />
+        <CountdownBox value={time.minutes} label="Minutes" delay={0.2} />
+        <CountdownBox value={time.seconds} label="Seconds" pulse delay={0.3} />
+      </div>
     </section>
   );
 }
