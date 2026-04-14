@@ -1,41 +1,46 @@
-import { useRef, useState, useEffect, useCallback } from "react";
-import { triggerParticleBurst } from "./GoldParticleBurst";
+import { useRef, useState, useEffect } from "react";
 
 export function MusicSystem() {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [showPrompt, setShowPrompt] = useState(false);
-  const [promptDismissed, setPromptDismissed] = useState(false);
+  const [ready, setReady] = useState(false);
 
-  const tryPlay = useCallback(async () => {
-    const audio = audioRef.current;
-    if (!audio) return;
-    try {
-      await audio.play();
-      setIsPlaying(true);
-      setShowPrompt(false);
-      setPromptDismissed(true);
-    } catch {
-      setShowPrompt(true);
-    }
-  }, []);
+  // Auto-play music on first user interaction (click/touch anywhere)
+  useEffect(() => {
+    const playAudio = async () => {
+      const audio = audioRef.current;
+      if (!audio || isPlaying) return;
+      try {
+        await audio.play();
+        setIsPlaying(true);
+        setReady(true);
+      } catch {
+        // ignore
+      }
+    };
+
+    // Try autoplay immediately
+    playAudio();
+
+    // Fallback: play on first user interaction
+    const handleInteraction = () => {
+      playAudio();
+      window.removeEventListener("click", handleInteraction);
+      window.removeEventListener("touchstart", handleInteraction);
+    };
+
+    window.addEventListener("click", handleInteraction);
+    window.addEventListener("touchstart", handleInteraction);
+
+    return () => {
+      window.removeEventListener("click", handleInteraction);
+      window.removeEventListener("touchstart", handleInteraction);
+    };
+  }, [isPlaying]);
 
   useEffect(() => {
-    // Attempt autoplay after a short delay
-    const t = setTimeout(() => tryPlay(), 500);
-    return () => clearTimeout(t);
-  }, [tryPlay]);
-
-  const handlePlay = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    triggerParticleBurst(rect.left + rect.width / 2, rect.top + rect.height / 2);
-    tryPlay();
-  };
-
-  const handleSkip = () => {
-    setShowPrompt(false);
-    setPromptDismissed(true);
-  };
+    if (isPlaying) setReady(true);
+  }, [isPlaying]);
 
   const toggleMusic = () => {
     const audio = audioRef.current;
@@ -53,75 +58,8 @@ export function MusicSystem() {
     <>
       <audio ref={audioRef} src="/wedding-music.mp3" loop preload="auto" style={{ display: "none" }} />
 
-      {/* Music Prompt Overlay */}
-      {showPrompt && (
-        <div
-          className="fixed inset-0 flex items-center justify-center"
-          style={{ zIndex: 10001, background: "rgba(0,0,0,0.6)" }}
-        >
-          <div
-            className="bg-white rounded-3xl p-10 text-center"
-            style={{ maxWidth: "360px", width: "90%" }}
-          >
-            <div className="flex justify-center mb-4">
-              <svg width="64" height="64" viewBox="0 0 24 24" fill="none" style={{ animation: "opacityPulse 2s infinite" }}>
-                <path d="M9 18V5l12-2v13" stroke="#C9A84C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-                <circle cx="6" cy="18" r="3" fill="#C9A84C" />
-                <circle cx="18" cy="16" r="3" fill="#C9A84C" />
-              </svg>
-            </div>
-            <h3
-              style={{
-                fontFamily: "'Cormorant Garamond', serif",
-                fontWeight: 600,
-                fontSize: "28px",
-                color: "#2C2C2C",
-                marginBottom: "8px",
-              }}
-            >
-              Start with Music 🎵
-            </h3>
-            <p
-              style={{
-                fontFamily: "'Lato', sans-serif",
-                fontWeight: 300,
-                fontSize: "15px",
-                color: "#8B6914",
-                marginBottom: "24px",
-              }}
-            >
-              Play romantic background music for the full experience.
-            </p>
-            <button
-              onClick={handlePlay}
-              className="w-full rounded-full py-3 text-white font-medium mb-3 cursor-pointer"
-              style={{
-                background: "#C9A84C",
-                fontFamily: "'Lato', sans-serif",
-                fontSize: "16px",
-              }}
-            >
-              Play Music ♪
-            </button>
-            <button
-              onClick={handleSkip}
-              className="w-full py-2 cursor-pointer bg-transparent border-none"
-              style={{
-                fontFamily: "'Lato', sans-serif",
-                fontWeight: 300,
-                fontSize: "13px",
-                color: "#8B6914",
-                opacity: 0.7,
-              }}
-            >
-              Continue without music
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Floating Music Toggle */}
-      {promptDismissed && (
+      {/* Floating Music Toggle — always visible */}
+      {ready && (
         <button
           onClick={toggleMusic}
           className="fixed cursor-pointer border-none"

@@ -18,7 +18,7 @@ function PlaceholderSlide({ index }: { index: number }) {
         style={{
           fontFamily: "'Cormorant Garamond', serif",
           fontWeight: 700,
-          fontSize: "80px",
+          fontSize: "clamp(48px, 10vw, 80px)",
           color: "#FAF7F2",
         }}
       >
@@ -93,36 +93,21 @@ export function GallerySection() {
           </motion.div>
         </AnimatePresence>
 
-        {/* Slide counter */}
-        <div
-          className="absolute top-4 right-4 rounded-full"
-          style={{
-            background: "rgba(0,0,0,0.4)",
-            padding: "4px 12px",
-            fontFamily: "'Lato', sans-serif",
-            fontWeight: 300,
-            fontSize: "13px",
-            color: "#FAF7F2",
-          }}
-        >
-          {current + 1} / {TOTAL_SLIDES}
-        </div>
-
         {/* Left arrow */}
         <button
           onClick={prev}
-          className="absolute left-4 top-1/2 -translate-y-1/2 flex items-center justify-center rounded-full cursor-pointer border-none"
+          className="absolute left-3 top-1/2 -translate-y-1/2 flex items-center justify-center rounded-full cursor-pointer border-none"
           style={{
-            width: "48px",
-            height: "48px",
-            background: "rgba(0,0,0,0.3)",
+            width: "44px",
+            height: "44px",
+            background: "rgba(0,0,0,0.35)",
             color: "white",
-            fontSize: "24px",
+            fontSize: "22px",
             transition: "background 0.2s",
-            minHeight: "44px",
+            backdropFilter: "blur(4px)",
           }}
           onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(201,168,76,0.5)"; }}
-          onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(0,0,0,0.3)"; }}
+          onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(0,0,0,0.35)"; }}
         >
           ‹
         </button>
@@ -130,23 +115,39 @@ export function GallerySection() {
         {/* Right arrow */}
         <button
           onClick={next}
-          className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center justify-center rounded-full cursor-pointer border-none"
+          className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center rounded-full cursor-pointer border-none"
           style={{
-            width: "48px",
-            height: "48px",
-            background: "rgba(0,0,0,0.3)",
+            width: "44px",
+            height: "44px",
+            background: "rgba(0,0,0,0.35)",
             color: "white",
-            fontSize: "24px",
+            fontSize: "22px",
             transition: "background 0.2s",
-            minHeight: "44px",
+            backdropFilter: "blur(4px)",
           }}
           onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(201,168,76,0.5)"; }}
-          onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(0,0,0,0.3)"; }}
+          onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(0,0,0,0.35)"; }}
         >
           ›
         </button>
-      </div>
 
+        {/* Progress bar at bottom */}
+        <div className="absolute bottom-0 left-0 right-0 flex" style={{ height: "3px", gap: "2px" }}>
+          {Array.from({ length: TOTAL_SLIDES }, (_, i) => (
+            <div
+              key={i}
+              className="flex-1 cursor-pointer"
+              onClick={() => setCurrent(i)}
+              style={{
+                background: i === current
+                  ? "#C9A84C"
+                  : "rgba(255,255,255,0.2)",
+                transition: "background 0.3s ease",
+              }}
+            />
+          ))}
+        </div>
+      </div>
     </section>
   );
 }
