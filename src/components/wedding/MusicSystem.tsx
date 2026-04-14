@@ -5,52 +5,61 @@ export function MusicSystem() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [ready, setReady] = useState(false);
 
-  // Auto-play music on first user interaction (click/touch anywhere)
+  // Auto-play once on first user interaction; do not re-arm when user pauses manually.
   useEffect(() => {
+    let active = true;
+
     const playAudio = async () => {
       const audio = audioRef.current;
-      if (!audio || isPlaying) return;
+      if (!audio) return;
       try {
         await audio.play();
+        if (!active) return;
         setIsPlaying(true);
         setReady(true);
+        window.removeEventListener("click", handleInteraction);
+        window.removeEventListener("touchstart", handleInteraction);
       } catch {
         // ignore
       }
     };
 
-    // Try autoplay immediately
-    playAudio();
-
-    // Fallback: play on first user interaction
     const handleInteraction = () => {
-      playAudio();
-      window.removeEventListener("click", handleInteraction);
-      window.removeEventListener("touchstart", handleInteraction);
+      void playAudio();
     };
 
+    // Try autoplay immediately
+    void playAudio();
+
+    // Fallback: play on first user interaction
     window.addEventListener("click", handleInteraction);
     window.addEventListener("touchstart", handleInteraction);
 
     return () => {
+      active = false;
       window.removeEventListener("click", handleInteraction);
       window.removeEventListener("touchstart", handleInteraction);
     };
-  }, [isPlaying]);
+  }, []);
 
   useEffect(() => {
     if (isPlaying) setReady(true);
   }, [isPlaying]);
 
-  const toggleMusic = () => {
+  const toggleMusic = async () => {
     const audio = audioRef.current;
     if (!audio) return;
+
     if (isPlaying) {
       audio.pause();
       setIsPlaying(false);
     } else {
-      audio.play();
-      setIsPlaying(true);
+      try {
+        await audio.play();
+        setIsPlaying(true);
+      } catch {
+        // ignore
+      }
     }
   };
 
@@ -61,8 +70,12 @@ export function MusicSystem() {
       {/* Floating Music Toggle — always visible */}
       {ready && (
         <button
-          onClick={toggleMusic}
+          onClick={(e) => {
+            e.stopPropagation();
+            void toggleMusic();
+          }}
           className="fixed cursor-pointer border-none"
+          type="button"
           style={{
             bottom: "24px",
             right: "24px",
