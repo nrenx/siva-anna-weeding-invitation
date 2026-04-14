@@ -1,0 +1,187 @@
+import { useState, useEffect, useRef, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { SectionHeading } from "./SectionHeading";
+
+const TOTAL_SLIDES = 5;
+
+function PlaceholderSlide({ index }: { index: number }) {
+  return (
+    <div
+      className="w-full flex flex-col items-center justify-center"
+      style={{
+        aspectRatio: "16/10",
+        background: "radial-gradient(circle at center, #C9A84C, #8B6914)",
+        borderRadius: "16px",
+      }}
+    >
+      <span
+        style={{
+          fontFamily: "'Cormorant Garamond', serif",
+          fontWeight: 700,
+          fontSize: "80px",
+          color: "#FAF7F2",
+        }}
+      >
+        S ♥ S
+      </span>
+      <span
+        style={{
+          fontFamily: "'Lato', sans-serif",
+          fontWeight: 300,
+          fontSize: "14px",
+          color: "rgba(255,255,255,0.5)",
+          marginTop: "8px",
+        }}
+      >
+        {/* TODO: Replace with actual photo */}
+        [ Photo Slot #{index + 1} ]
+      </span>
+    </div>
+  );
+}
+
+export function GallerySection() {
+  const [current, setCurrent] = useState(0);
+  const touchStart = useRef<number | null>(null);
+
+  const next = useCallback(() => setCurrent((c) => (c + 1) % TOTAL_SLIDES), []);
+  const prev = useCallback(() => setCurrent((c) => (c - 1 + TOTAL_SLIDES) % TOTAL_SLIDES), []);
+
+  useEffect(() => {
+    const interval = setInterval(next, 4000);
+    return () => clearInterval(interval);
+  }, [next]);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStart.current = e.touches[0].clientX;
+  };
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStart.current === null) return;
+    const delta = e.changedTouches[0].clientX - touchStart.current;
+    if (Math.abs(delta) > 50) {
+      delta > 0 ? prev() : next();
+    }
+    touchStart.current = null;
+  };
+
+  return (
+    <section
+      id="gallery"
+      className="py-16 sm:py-20 md:py-24 px-4"
+      style={{ backgroundColor: "#2C2C2C" }}
+    >
+      <SectionHeading
+        title="Our Story"
+        subtitle="A love story worth every photograph"
+        light
+      />
+
+      <div
+        className="relative max-w-[800px] mx-auto overflow-hidden rounded-2xl"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={current}
+            initial={{ opacity: 0, x: 60 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -60 }}
+            transition={{ duration: 0.6 }}
+          >
+            <PlaceholderSlide index={current} />
+          </motion.div>
+        </AnimatePresence>
+
+        {/* Slide counter */}
+        <div
+          className="absolute top-4 right-4 rounded-full"
+          style={{
+            background: "rgba(0,0,0,0.4)",
+            padding: "4px 12px",
+            fontFamily: "'Lato', sans-serif",
+            fontWeight: 300,
+            fontSize: "13px",
+            color: "#FAF7F2",
+          }}
+        >
+          {current + 1} / {TOTAL_SLIDES}
+        </div>
+
+        {/* Left arrow */}
+        <button
+          onClick={prev}
+          className="absolute left-4 top-1/2 -translate-y-1/2 flex items-center justify-center rounded-full cursor-pointer border-none"
+          style={{
+            width: "48px",
+            height: "48px",
+            background: "rgba(0,0,0,0.3)",
+            color: "white",
+            fontSize: "24px",
+            transition: "background 0.2s",
+            minHeight: "44px",
+          }}
+          onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(201,168,76,0.5)"; }}
+          onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(0,0,0,0.3)"; }}
+        >
+          ‹
+        </button>
+
+        {/* Right arrow */}
+        <button
+          onClick={next}
+          className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center justify-center rounded-full cursor-pointer border-none"
+          style={{
+            width: "48px",
+            height: "48px",
+            background: "rgba(0,0,0,0.3)",
+            color: "white",
+            fontSize: "24px",
+            transition: "background 0.2s",
+            minHeight: "44px",
+          }}
+          onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(201,168,76,0.5)"; }}
+          onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(0,0,0,0.3)"; }}
+        >
+          ›
+        </button>
+      </div>
+
+      {/* Dot indicators */}
+      <div className="flex items-center justify-center gap-[10px] mt-6">
+        {Array.from({ length: TOTAL_SLIDES }, (_, i) => (
+          <button
+            key={i}
+            onClick={() => setCurrent(i)}
+            className="rounded-full cursor-pointer border-none p-0"
+            style={{
+              width: current === i ? "10px" : "8px",
+              height: current === i ? "10px" : "8px",
+              background: current === i ? "#C9A84C" : "transparent",
+              border: current === i ? "none" : "1.5px solid #C9A84C",
+              opacity: current === i ? 1 : 0.5,
+              transform: current === i ? "scale(1.3)" : "scale(1)",
+              transition: "all 0.3s ease",
+              minWidth: "44px",
+              minHeight: "44px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <span
+              className="rounded-full block"
+              style={{
+                width: current === i ? "10px" : "8px",
+                height: current === i ? "10px" : "8px",
+                background: current === i ? "#C9A84C" : "transparent",
+                border: current === i ? "none" : "1.5px solid #C9A84C",
+                opacity: current === i ? 1 : 0.5,
+              }}
+            />
+          </button>
+        ))}
+      </div>
+    </section>
+  );
+}
