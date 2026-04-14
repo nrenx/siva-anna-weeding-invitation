@@ -10,6 +10,7 @@ export function DoorReveal({ onOpen }: DoorRevealProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [removed, setRemoved] = useState(false);
   const revealTimeoutRef = useRef<number | null>(null);
+  const REVEAL_TOTAL_MS = 2550;
 
   useEffect(() => {
     return () => {
@@ -25,11 +26,11 @@ export function DoorReveal({ onOpen }: DoorRevealProps) {
     triggerParticleBurst(rect.left + rect.width / 2, rect.top + rect.height / 2);
     setIsOpen(true);
 
-    // Let the doors complete opening before revealing the invitation content.
+    // Keep overlay long enough for anticipation -> open -> glow hold sequence.
     revealTimeoutRef.current = window.setTimeout(() => {
       setRemoved(true);
       onOpen();
-    }, 2250);
+    }, REVEAL_TOTAL_MS);
   };
 
   if (removed) return null;
@@ -51,8 +52,29 @@ export function DoorReveal({ onOpen }: DoorRevealProps) {
           className="fixed inset-0 select-none"
           style={{ zIndex: 10000, perspective: "1200px" }}
           animate={{ opacity: isOpen ? 0 : 1 }}
-          transition={{ delay: isOpen ? 1.6 : 0, duration: 0.6 }}
+          transition={{ delay: isOpen ? 2.1 : 0, duration: 0.45 }}
         >
+          {/* Center glow during reveal hold */}
+          {isOpen && (
+            <motion.div
+              className="absolute inset-0 flex items-center justify-center"
+              style={{ zIndex: 10000, pointerEvents: "none" }}
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: [0, 0.42, 0.2, 0], scale: [0.8, 1.08, 1.12, 1.16] }}
+              transition={{ delay: 0.35, duration: 1.85, ease: [0.22, 0.61, 0.36, 1] }}
+            >
+              <div
+                style={{
+                  width: "min(64vw, 620px)",
+                  height: "min(64vw, 620px)",
+                  borderRadius: "50%",
+                  background: "radial-gradient(circle, rgba(253,246,227,0.34) 0%, rgba(201,168,76,0.16) 38%, rgba(201,168,76,0.03) 70%, transparent 100%)",
+                  filter: "blur(1px)",
+                }}
+              />
+            </motion.div>
+          )}
+
           {/* Left door */}
           <motion.div
             className="absolute top-0 left-0 w-1/2 h-full flex flex-col items-center justify-center"
@@ -61,8 +83,13 @@ export function DoorReveal({ onOpen }: DoorRevealProps) {
               transformOrigin: "left center",
               boxShadow: "inset -10px 0 30px rgba(0,0,0,0.15)",
             }}
-            animate={{ rotateY: isOpen ? -110 : 0 }}
-            transition={{ duration: 1.4, ease: [0.4, 0, 0.2, 1] }}
+            animate={{ rotateY: isOpen ? [0, 4, -102] : 0 }}
+            transition={{
+              duration: 1.45,
+              delay: isOpen ? 0.2 : 0,
+              times: isOpen ? [0, 0.14, 1] : undefined,
+              ease: [0.22, 0.61, 0.36, 1],
+            }}
           >
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -94,8 +121,13 @@ export function DoorReveal({ onOpen }: DoorRevealProps) {
               transformOrigin: "right center",
               boxShadow: "inset 10px 0 30px rgba(0,0,0,0.15)",
             }}
-            animate={{ rotateY: isOpen ? 110 : 0 }}
-            transition={{ duration: 1.4, ease: [0.4, 0, 0.2, 1] }}
+            animate={{ rotateY: isOpen ? [0, -4, 108] : 0 }}
+            transition={{
+              duration: 1.52,
+              delay: isOpen ? 0.2 : 0,
+              times: isOpen ? [0, 0.14, 1] : undefined,
+              ease: [0.22, 0.61, 0.36, 1],
+            }}
           >
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -130,54 +162,60 @@ export function DoorReveal({ onOpen }: DoorRevealProps) {
               <button
                 onClick={handleOpen}
                 className="relative cursor-pointer border-none rounded-full flex flex-col items-center justify-center group"
+                type="button"
                 style={{
-                  width: "clamp(108px, 22vw, 144px)",
-                  height: "clamp(108px, 22vw, 144px)",
-                  background: "radial-gradient(circle, rgba(250,247,242,0.14) 0%, rgba(201,168,76,0.06) 100%)",
-                  backdropFilter: "blur(6px)",
-                  border: "1px solid rgba(250,247,242,0.28)",
-                  boxShadow: "0 10px 30px rgba(0,0,0,0.18), inset 0 0 20px rgba(201,168,76,0.08)",
-                  transition: "all 0.35s ease",
+                  width: "clamp(92px, 18vw, 106px)",
+                  height: "clamp(92px, 18vw, 106px)",
+                  background: "radial-gradient(circle at 30% 28%, #fffdf8 0%, #f9f1dd 52%, #ead5a4 100%)",
+                  border: "1px solid rgba(139,105,20,0.38)",
+                  boxShadow: "0 10px 24px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.82), inset 0 -8px 14px rgba(201,168,76,0.18)",
+                  transition: "all 0.3s ease",
                 }}
               >
-                {/* Rotating outer ring */}
-                <motion.svg
-                  width="100%"
-                  height="100%"
-                  viewBox="0 0 180 180"
-                  className="absolute inset-0"
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 28, repeat: Infinity, ease: "linear" }}
-                >
-                  <circle cx="90" cy="90" r="85" stroke="rgba(250,247,242,0.14)" strokeWidth="0.4" fill="none" />
-                  <circle cx="90" cy="90" r="80" stroke="rgba(201,168,76,0.22)" strokeWidth="0.45" fill="none" strokeDasharray="6 14" />
-                </motion.svg>
+                {/* Outer crisp ring for contrast against gold door */}
+                <span
+                  className="absolute inset-0 rounded-full"
+                  style={{
+                    border: "1px solid rgba(255,248,228,0.62)",
+                  }}
+                />
 
-                {/* Pulsing inner ring */}
+                {/* Subtle breathing inner ring */}
                 <motion.span
                   className="absolute rounded-full"
                   style={{
-                    width: "90%",
-                    height: "90%",
-                    border: "1px solid rgba(201,168,76,0.3)",
+                    width: "84%",
+                    height: "84%",
+                    border: "1px solid rgba(139,105,20,0.36)",
                   }}
-                  animate={{ scale: [1, 1.04, 1], opacity: [0.34, 0.58, 0.34] }}
-                  transition={{ duration: 2.8, repeat: Infinity, ease: "easeInOut" }}
+                  animate={{ scale: [1, 1.018, 1], opacity: [0.62, 0.95, 0.62] }}
+                  transition={{ duration: 2.6, repeat: Infinity, ease: "easeInOut" }}
                 />
 
-                {/* Icon */}
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" style={{ marginBottom: "4px" }}>
-                  <path d="M12 2L14.09 8.26L20.18 8.63L15.54 12.74L17.12 19.02L12 15.77L6.88 19.02L8.46 12.74L3.82 8.63L9.91 8.26L12 2Z" fill="#C9A84C" opacity="0.9" />
-                </svg>
+                {/* Tiny ornament */}
+                <span
+                  style={{
+                    fontFamily: "'Cormorant Garamond', serif",
+                    fontWeight: 700,
+                    fontSize: "12px",
+                    lineHeight: 1,
+                    color: "rgba(139,105,20,0.5)",
+                    marginBottom: "2px",
+                  }}
+                >
+                  ✦
+                </span>
 
                 <span
                   style={{
                     fontFamily: "'Cormorant Garamond', serif",
-                    fontWeight: 600,
-                    fontSize: "clamp(12px, 2vw, 16px)",
-                    color: "#FAF7F2",
-                    letterSpacing: "0.12em",
+                    fontWeight: 700,
+                    fontSize: "clamp(10px, 1.5vw, 12px)",
+                    color: "#6B4F12",
+                    letterSpacing: "0.08em",
                     textTransform: "uppercase",
+                    textAlign: "center",
+                    lineHeight: 1.1,
                   }}
                 >
                   OPEN
@@ -185,11 +223,12 @@ export function DoorReveal({ onOpen }: DoorRevealProps) {
                 <span
                   style={{
                     fontFamily: "'Lato', sans-serif",
-                    fontWeight: 300,
-                    fontSize: "clamp(8px, 1.2vw, 10px)",
-                    color: "rgba(250,247,242,0.62)",
-                    letterSpacing: "0.16em",
-                    marginTop: "2px",
+                    fontWeight: 500,
+                    fontSize: "clamp(7px, 1vw, 8px)",
+                    color: "rgba(107,79,18,0.86)",
+                    letterSpacing: "0.12em",
+                    marginTop: "1px",
+                    textTransform: "uppercase",
                   }}
                 >
                   INVITATION

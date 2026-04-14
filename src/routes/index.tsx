@@ -58,19 +58,19 @@ function WeddingPage() {
       {/* Main content */}
       <main className="overflow-x-hidden">
         <HeroSection />
-        <GoldDivider />
+        <GoldDivider topColor="#FAF7F2" bottomColor="#FDF6E3" />
         <CountdownSection />
-        <GoldDivider />
+        <GoldDivider topColor="#FDF6E3" bottomColor="#FAF7F2" />
         <CoupleSection />
-        <GoldDivider />
+        <GoldDivider topColor="#FAF7F2" bottomColor="#FDF6E3" />
         <EventsSection />
-        <GoldDivider />
+        <GoldDivider topColor="#FDF6E3" bottomColor="#FAF7F2" />
         <CeremonySection />
-        <GoldDivider />
+        <GoldDivider topColor="#FAF7F2" bottomColor="#FDF6E3" />
         <FamilySection />
-        <GoldDivider />
+        <GoldDivider topColor="#FDF6E3" bottomColor="#2C2C2C" />
         <GallerySection />
-        <GoldDivider />
+        <GoldDivider topColor="#2C2C2C" bottomColor="#1A1A1A" />
         <FooterSection />
       </main>
     </>

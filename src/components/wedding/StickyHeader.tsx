@@ -26,7 +26,7 @@ export function StickyHeader() {
           animate={{ y: 0 }}
           exit={{ y: -60 }}
           transition={{ duration: 0.35, ease: "easeOut" }}
-          className="fixed top-0 left-0 right-0 flex items-center justify-between px-6"
+          className="fixed top-0 left-0 right-0 flex items-center justify-center md:justify-between px-4 sm:px-6"
           style={{
             zIndex: 9990,
             height: "56px",
@@ -36,10 +36,10 @@ export function StickyHeader() {
           }}
         >
           <span
+            className="w-full text-center md:w-auto md:text-left text-[clamp(24px,7vw,32px)] md:text-[20px] leading-none"
             style={{
               fontFamily: "'Cormorant Garamond', serif",
               fontWeight: 500,
-              fontSize: "20px",
               color: "#C9A84C",
             }}
           >

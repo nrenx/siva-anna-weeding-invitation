@@ -12,33 +12,33 @@ interface Petal {
 
 export function FloatingPetals() {
   const [petals, setPetals] = useState<Petal[]>([]);
-  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 640);
-    check();
-    window.addEventListener("resize", check);
-    return () => window.removeEventListener("resize", check);
-  }, []);
+    const createPetals = () => {
+      const isMobile = window.innerWidth < 640;
+      const count = isMobile ? 7 : 12;
 
-  useEffect(() => {
-    if (isMobile) { setPetals([]); return; }
-    const p: Petal[] = Array.from({ length: 12 }, (_, i) => ({
+      const p: Petal[] = Array.from({ length: count }, (_, i) => ({
       id: i,
       left: `${5 + Math.random() * 90}%`,
-      duration: `${8 + Math.random() * 10}s`,
+      duration: `${isMobile ? 9 + Math.random() * 9 : 8 + Math.random() * 10}s`,
       delay: `${Math.random() * 12}s`,
-      opacity: 0.4 + Math.random() * 0.4,
-      size: 10 + Math.random() * 8,
+      opacity: isMobile ? 0.28 + Math.random() * 0.24 : 0.4 + Math.random() * 0.4,
+      size: isMobile ? 7 + Math.random() * 5 : 10 + Math.random() * 8,
       color: i % 3 === 0 ? "#FAF7F2" : i % 3 === 1 ? "#f4c2c2" : "#E8D5A3",
     }));
-    setPetals(p);
-  }, [isMobile]);
+      setPetals(p);
+    };
 
-  if (isMobile || petals.length === 0) return null;
+    createPetals();
+    window.addEventListener("resize", createPetals);
+    return () => window.removeEventListener("resize", createPetals);
+  }, []);
+
+  if (petals.length === 0) return null;
 
   return (
-    <div className="fixed inset-0 pointer-events-none" style={{ zIndex: 0 }}>
+    <div className="fixed inset-0 pointer-events-none" style={{ zIndex: 1 }}>
       {petals.map((p) => (
         <svg
           key={p.id}
