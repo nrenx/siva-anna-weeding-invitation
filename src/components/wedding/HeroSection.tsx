@@ -1,5 +1,72 @@
 import { motion } from "framer-motion";
 
+function FloralCorner({ mirrored = false }: { mirrored?: boolean }) {
+  return (
+    <svg
+      viewBox="0 0 320 220"
+      className="h-[140px] w-[180px] sm:h-[170px] sm:w-[220px] md:h-[210px] md:w-[280px]"
+      fill="none"
+      style={{ transform: mirrored ? "scaleX(-1)" : undefined }}
+      aria-hidden="true"
+    >
+      <path d="M6 6C48 14 78 34 98 60" stroke="#C9A84C" strokeWidth="1.1" opacity="0.55" />
+      <path d="M26 4C70 16 108 42 134 78" stroke="#E8D5A3" strokeWidth="1" opacity="0.65" />
+      <path d="M0 58C42 58 76 78 104 106" stroke="#C9A84C" strokeWidth="0.9" opacity="0.4" />
+
+      <ellipse cx="34" cy="34" rx="18" ry="11" fill="#E8D5A3" opacity="0.6" transform="rotate(-24 34 34)" />
+      <ellipse cx="58" cy="22" rx="15" ry="9" fill="#C9A84C" opacity="0.48" transform="rotate(14 58 22)" />
+      <ellipse cx="78" cy="50" rx="14" ry="9" fill="#D8B2B6" opacity="0.52" transform="rotate(-38 78 50)" />
+      <ellipse cx="102" cy="34" rx="13" ry="8" fill="#E8D5A3" opacity="0.55" transform="rotate(-10 102 34)" />
+      <ellipse cx="122" cy="58" rx="15" ry="10" fill="#D8B2B6" opacity="0.5" transform="rotate(22 122 58)" />
+
+      <circle cx="54" cy="48" r="13" fill="#FAF7F2" stroke="#C9A84C" strokeWidth="0.9" opacity="0.9" />
+      <circle cx="54" cy="48" r="5" fill="#C9A84C" opacity="0.8" />
+      {[0, 45, 90, 135].map((r) => (
+        <ellipse
+          key={r}
+          cx="54"
+          cy="48"
+          rx="6"
+          ry="14"
+          fill="none"
+          stroke="#C9A84C"
+          strokeWidth="0.7"
+          opacity="0.62"
+          transform={`rotate(${r} 54 48)`}
+        />
+      ))}
+
+      <circle cx="114" cy="72" r="11" fill="#FAF7F2" stroke="#C9A84C" strokeWidth="0.8" opacity="0.85" />
+      <circle cx="114" cy="72" r="4" fill="#C9A84C" opacity="0.75" />
+      {[20, 80, 140].map((r) => (
+        <ellipse
+          key={r}
+          cx="114"
+          cy="72"
+          rx="5"
+          ry="12"
+          fill="none"
+          stroke="#E8D5A3"
+          strokeWidth="0.7"
+          opacity="0.66"
+          transform={`rotate(${r} 114 72)`}
+        />
+      ))}
+
+      <ellipse cx="148" cy="92" rx="18" ry="8" fill="#9BA989" opacity="0.34" transform="rotate(26 148 92)" />
+      <ellipse cx="168" cy="118" rx="16" ry="8" fill="#9BA989" opacity="0.3" transform="rotate(42 168 118)" />
+      <ellipse cx="128" cy="118" rx="16" ry="7" fill="#9BA989" opacity="0.28" transform="rotate(-6 128 118)" />
+
+      <circle cx="180" cy="86" r="7" fill="#D8B2B6" opacity="0.5" />
+      <circle cx="200" cy="108" r="5" fill="#E8D5A3" opacity="0.46" />
+      <circle cx="154" cy="136" r="6" fill="#D8B2B6" opacity="0.42" />
+
+      <path d="M164 84Q184 96 204 118" stroke="#C9A84C" strokeWidth="0.9" opacity="0.45" />
+      <path d="M138 106Q152 118 172 140" stroke="#E8D5A3" strokeWidth="0.9" opacity="0.5" />
+    </svg>
+  );
+}
+
 export function HeroSection() {
   return (
     <section
@@ -11,8 +78,18 @@ export function HeroSection() {
         backgroundImage: `repeating-linear-gradient(45deg, rgba(201,168,76,0.04) 0px, rgba(201,168,76,0.04) 1px, transparent 1px, transparent 40px)`,
       }}
     >
+      {/* Top floral corners inspired by invitation cards, recolored to this theme */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 z-[1] flex justify-between px-0 sm:px-2 md:px-4">
+        <div className="origin-top-left opacity-95">
+          <FloralCorner />
+        </div>
+        <div className="origin-top-right opacity-95">
+          <FloralCorner mirrored />
+        </div>
+      </div>
+
       {/* Mobile ornamental crown */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-[30vh] md:hidden">
+      <div className="pointer-events-none absolute inset-x-0 top-0 z-[2] h-[30vh] md:hidden">
         <div
           className="absolute inset-0"
           style={{
