@@ -7,6 +7,8 @@ interface Petal {
   delay: string;
   opacity: number;
   size: number;
+  drift: number;
+  rotation: number;
   color: string;
 }
 
@@ -16,17 +18,19 @@ export function FloatingPetals() {
   useEffect(() => {
     const createPetals = () => {
       const isMobile = window.innerWidth < 640;
-      const count = isMobile ? 7 : 12;
+      const count = isMobile ? 18 : 32;
 
       const p: Petal[] = Array.from({ length: count }, (_, i) => ({
-      id: i,
-      left: `${5 + Math.random() * 90}%`,
-      duration: `${isMobile ? 9 + Math.random() * 9 : 8 + Math.random() * 10}s`,
-      delay: `${Math.random() * 12}s`,
-      opacity: isMobile ? 0.28 + Math.random() * 0.24 : 0.4 + Math.random() * 0.4,
-      size: isMobile ? 7 + Math.random() * 5 : 10 + Math.random() * 8,
-      color: i % 3 === 0 ? "#FAF7F2" : i % 3 === 1 ? "#f4c2c2" : "#E8D5A3",
-    }));
+        id: i,
+        left: `${2 + Math.random() * 96}%`,
+        duration: `${isMobile ? 11 + Math.random() * 7 : 9 + Math.random() * 8}s`,
+        delay: `${Math.random() * 10}s`,
+        opacity: isMobile ? 0.56 + Math.random() * 0.26 : 0.62 + Math.random() * 0.28,
+        size: isMobile ? 11 + Math.random() * 7 : 13 + Math.random() * 10,
+        drift: (Math.random() - 0.5) * (isMobile ? 48 : 72),
+        rotation: (Math.random() - 0.5) * 120,
+        color: i % 4 === 0 ? "#FAF7F2" : i % 4 === 1 ? "#f4c2c2" : i % 4 === 2 ? "#E8D5A3" : "#f6dada",
+      }));
       setPetals(p);
     };
 
@@ -38,7 +42,7 @@ export function FloatingPetals() {
   if (petals.length === 0) return null;
 
   return (
-    <div className="fixed inset-0 pointer-events-none" style={{ zIndex: 1 }}>
+    <div className="fixed inset-0 pointer-events-none" style={{ zIndex: 15 }}>
       {petals.map((p) => (
         <svg
           key={p.id}
@@ -51,6 +55,9 @@ export function FloatingPetals() {
             top: "-20px",
             animation: `petalFall ${p.duration} ${p.delay} linear infinite`,
             ["--petal-opacity" as string]: p.opacity,
+            ["--petal-drift" as string]: `${p.drift}px`,
+            ["--petal-rotation" as string]: `${p.rotation}deg`,
+            filter: "drop-shadow(0 0 2px rgba(201, 168, 76, 0.35))",
           }}
         >
           <ellipse cx="5" cy="7.5" rx="4" ry="7" fill={p.color} opacity={p.opacity} />
