@@ -62,34 +62,61 @@ export function HeroSection() {
         Bollineni Siva
       </motion.h1>
 
-      {/* Ampersand with rotating ring */}
+      {/* Weds label lockup */}
       <motion.div
         initial={{ opacity: 0, scale: 0.5 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.7, duration: 0.6 }}
-        className="relative my-4 flex items-center justify-center"
+        className="my-3 flex items-center justify-center gap-3"
       >
+        <span
+          style={{
+            width: "36px",
+            height: "1px",
+            background: "#C9A84C",
+            opacity: 0.55,
+          }}
+        />
         <svg
-          width="120"
-          height="120"
-          viewBox="0 0 120 120"
-          className="absolute"
-          style={{ animation: "rotateRing 25s linear infinite", opacity: 0.3 }}
+          width="14"
+          height="14"
+          viewBox="0 0 14 14"
+          fill="none"
+          style={{ opacity: 0.7 }}
         >
-          <circle cx="60" cy="60" r="55" stroke="#C9A84C" strokeWidth="0.8" fill="none" />
+          <circle cx="7" cy="7" r="2.2" fill="#C9A84C" />
         </svg>
         <span
           style={{
-            fontFamily: "'Cormorant Garamond', serif",
-            fontWeight: 300,
+            fontFamily: "'Playfair Display', serif",
+            fontWeight: 500,
             fontStyle: "italic",
-            fontSize: "clamp(60px, 9vw, 96px)",
+            fontSize: "clamp(26px, 3.8vw, 38px)",
             color: "#C9A84C",
             lineHeight: 1,
+            letterSpacing: "0.04em",
+            textTransform: "lowercase",
           }}
         >
-          &amp;
+          weds
         </span>
+        <svg
+          width="14"
+          height="14"
+          viewBox="0 0 14 14"
+          fill="none"
+          style={{ opacity: 0.7 }}
+        >
+          <circle cx="7" cy="7" r="2.2" fill="#C9A84C" />
+        </svg>
+        <span
+          style={{
+            width: "36px",
+            height: "1px",
+            background: "#C9A84C",
+            opacity: 0.55,
+          }}
+        />
       </motion.div>
 
       {/* Bride Name */}
@@ -109,11 +136,81 @@ export function HeroSection() {
         Sahithi
       </motion.h1>
 
+      {/* Supporting line */}
+      <motion.p
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1.02, duration: 0.55 }}
+        style={{
+          fontFamily: "'Lato', sans-serif",
+          fontWeight: 300,
+          fontSize: "13px",
+          color: "#8B6914",
+          letterSpacing: "0.16em",
+          textTransform: "uppercase",
+          marginTop: "8px",
+        }}
+      >
+        A Celebration of Love and Tradition
+      </motion.p>
+
+      {/* Primary actions */}
+      <motion.div
+        initial={{ opacity: 0, y: 18 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1.08, duration: 0.55 }}
+        className="mt-6 flex flex-wrap items-center justify-center gap-3"
+      >
+        <a
+          href="#events"
+          style={{
+            background: "#C9A84C",
+            color: "#FAF7F2",
+            borderRadius: "999px",
+            padding: "11px 22px",
+            minHeight: "44px",
+            display: "inline-flex",
+            alignItems: "center",
+            justifyContent: "center",
+            textDecoration: "none",
+            fontFamily: "'Lato', sans-serif",
+            fontWeight: 400,
+            fontSize: "13px",
+            letterSpacing: "0.08em",
+            textTransform: "uppercase",
+          }}
+        >
+          View Events
+        </a>
+        <a
+          href="#gallery"
+          style={{
+            background: "transparent",
+            color: "#8B6914",
+            border: "1px solid #C9A84C",
+            borderRadius: "999px",
+            padding: "11px 22px",
+            minHeight: "44px",
+            display: "inline-flex",
+            alignItems: "center",
+            justifyContent: "center",
+            textDecoration: "none",
+            fontFamily: "'Lato', sans-serif",
+            fontWeight: 400,
+            fontSize: "13px",
+            letterSpacing: "0.08em",
+            textTransform: "uppercase",
+          }}
+        >
+          Explore Gallery
+        </a>
+      </motion.div>
+
       {/* Gold rule */}
       <motion.div
         initial={{ opacity: 0, scaleX: 0 }}
         animate={{ opacity: 1, scaleX: 1 }}
-        transition={{ delay: 1.1, duration: 0.5 }}
+        transition={{ delay: 1.18, duration: 0.5 }}
         className="my-6"
         style={{ width: "100px", height: "1px", background: "#C9A84C" }}
       />

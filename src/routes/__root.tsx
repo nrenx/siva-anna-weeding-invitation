@@ -31,14 +31,21 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "Bollineni Siva & Sahithi — Wedding Invitation" },
+      {
+        name: "description",
+        content:
+          "You are cordially invited to the wedding celebration of Bollineni Siva and Sahithi in Tirupati.",
+      },
+      { name: "author", content: "Bollineni Siva & Sahithi" },
+      { property: "og:title", content: "Bollineni Siva & Sahithi — Wedding Invitation" },
+      {
+        property: "og:description",
+        content:
+          "Celebrating the union of Bollineni Siva and Sahithi with love, tradition, and joy.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
     ],
     links: [
       {

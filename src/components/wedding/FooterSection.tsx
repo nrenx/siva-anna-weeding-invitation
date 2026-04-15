@@ -157,17 +157,21 @@ export function FooterSection() {
       </div>
 
       {/* Credit */}
-      <p
-        className="mt-10"
+      <a
+        href="#home"
+        className="mt-10 block text-center transition-colors hover:opacity-100"
         style={{
           fontFamily: "'Lato', sans-serif",
           fontWeight: 300,
           fontSize: "12px",
-          color: "rgba(250,247,242,0.35)",
+          color: "rgba(250,247,242,0.78)",
+          textDecoration: "none",
+          letterSpacing: "0.12em",
         }}
       >
         Made with ♥ for a celebration that lasts forever
-      </p>
+      </a>
+
     </footer>
   );
 }

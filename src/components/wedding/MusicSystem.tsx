@@ -80,8 +80,8 @@ export function MusicSystem() {
             bottom: "24px",
             right: "24px",
             zIndex: 9998,
-            width: "52px",
-            height: "52px",
+            width: "44px",
+            height: "44px",
             borderRadius: "50%",
             background: "#C9A84C",
             display: "flex",
@@ -108,7 +108,7 @@ export function MusicSystem() {
               }}
             />
           )}
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="white">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="white">
             {isPlaying ? (
               <>
                 <rect x="6" y="4" width="4" height="16" rx="1" />

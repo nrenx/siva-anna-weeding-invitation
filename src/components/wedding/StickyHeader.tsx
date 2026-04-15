@@ -1,14 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const navItems = [
-  { label: "Home", href: "#home" },
-  { label: "Events", href: "#events" },
-  { label: "Family", href: "#family" },
-  { label: "Gallery", href: "#gallery" },
-  { label: "RSVP", href: "#rsvp" },
-];
-
 export function StickyHeader() {
   const [visible, setVisible] = useState(false);
 
@@ -26,7 +18,7 @@ export function StickyHeader() {
           animate={{ y: 0 }}
           exit={{ y: -60 }}
           transition={{ duration: 0.35, ease: "easeOut" }}
-          className="fixed top-0 left-0 right-0 flex items-center justify-center md:justify-between px-4 sm:px-6"
+          className="fixed top-0 left-0 right-0 flex items-center justify-center px-4 sm:px-6"
           style={{
             zIndex: 9990,
             height: "56px",
@@ -35,51 +27,63 @@ export function StickyHeader() {
             borderBottom: "1px solid #E8D5A3",
           }}
         >
-          <span
-            className="w-full text-center md:w-auto md:text-left text-[clamp(24px,7vw,32px)] md:text-[20px] leading-none"
-            style={{
-              fontFamily: "'Cormorant Garamond', serif",
-              fontWeight: 500,
-              color: "#C9A84C",
-            }}
-          >
-            Siva ♥ Sahithi
-          </span>
+          <div className="w-full flex items-center justify-center gap-2 sm:gap-3 whitespace-nowrap leading-none">
+            <span
+              style={{
+                fontFamily: "'Cormorant Garamond', serif",
+                fontWeight: 600,
+                fontSize: "clamp(30px, 6.4vw, 40px)",
+                color: "#C9A84C",
+              }}
+            >
+              Siva
+            </span>
 
-          {/* Desktop nav dots */}
-          <nav className="hidden md:flex items-center gap-6">
-            {navItems.map((item) => (
-              <a
-                key={item.label}
-                href={item.href}
-                style={{
-                  fontFamily: "'Lato', sans-serif",
-                  fontWeight: 300,
-                  fontSize: "12px",
-                  color: "#C9A84C",
-                  letterSpacing: "0.15em",
-                  textDecoration: "none",
-                }}
-              >
-                {item.label}
-              </a>
-            ))}
-          </nav>
+            <span
+              aria-hidden="true"
+              style={{
+                width: "5px",
+                height: "5px",
+                borderRadius: "50%",
+                background: "rgba(201,168,76,0.6)",
+              }}
+            />
 
-          <span
-            className="hidden sm:block"
-            style={{
-              fontFamily: "'Lato', sans-serif",
-              fontWeight: 300,
-              fontSize: "13px",
-              color: "#2C2C2C",
-              fontStyle: "italic",
-              opacity: 0.7,
-            }}
-          >
-            {/* TODO: Replace with actual wedding date */}
-            <i style={{ color: "#8B6914" }}>[ Wedding Date ]</i>
-          </span>
+            <span
+              style={{
+                fontFamily: "'Playfair Display', serif",
+                fontWeight: 500,
+                fontStyle: "italic",
+                fontSize: "clamp(20px, 3.8vw, 26px)",
+                color: "#8B6914",
+                letterSpacing: "0.03em",
+                transform: "translateY(1px)",
+              }}
+            >
+              weds
+            </span>
+
+            <span
+              aria-hidden="true"
+              style={{
+                width: "5px",
+                height: "5px",
+                borderRadius: "50%",
+                background: "rgba(201,168,76,0.6)",
+              }}
+            />
+
+            <span
+              style={{
+                fontFamily: "'Cormorant Garamond', serif",
+                fontWeight: 600,
+                fontSize: "clamp(30px, 6.4vw, 40px)",
+                color: "#C9A84C",
+              }}
+            >
+              Sahithi
+            </span>
+          </div>
         </motion.header>
       )}
     </AnimatePresence>
