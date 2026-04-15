@@ -65,7 +65,13 @@ export function MusicSystem() {
 
   return (
     <>
-      <audio ref={audioRef} src="/wedding-music.mp3" loop preload="auto" style={{ display: "none" }} />
+      <audio
+        ref={audioRef}
+        src={`${import.meta.env.BASE_URL}wedding-music.mp3`}
+        loop
+        preload="auto"
+        style={{ display: "none" }}
+      />
 
       {/* Floating Music Toggle — always visible */}
       {ready && (
