@@ -1,5 +1,4 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
 import { Toaster } from "sonner";
 import { DoorReveal } from "@/components/wedding/DoorReveal";
 import { MusicSystem } from "@/components/wedding/MusicSystem";
@@ -30,8 +29,6 @@ export const Route = createFileRoute("/")({
 });
 
 function WeddingPage() {
-  const [doorOpen, setDoorOpen] = useState(false);
-
   return (
     <>
       <Toaster
@@ -47,7 +44,7 @@ function WeddingPage() {
       />
 
       {/* Door Reveal */}
-      {!doorOpen && <DoorReveal onOpen={() => setDoorOpen(true)} />}
+      <DoorReveal />
 
       {/* Global layers */}
       <ScrollProgressBar />
